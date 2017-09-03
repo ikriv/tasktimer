@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTimer", "SimpleTimer\SimpleTimer.csproj", "{E5726784-FEE1-444A-92C9-F297DCD955F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickUntilKeyPress", "TickUntilKeyPress\TickUntilKeyPress.csproj", "{9A657E96-422E-488B-953F-5DC6BD4E0799}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRequestOnTimer", "WebRequestOnTimer\WebRequestOnTimer.csproj", "{8F82B944-AB79-4511-ACCF-C4809630D95D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5726784-FEE1-444A-92C9-F297DCD955F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5726784-FEE1-444A-92C9-F297DCD955F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5726784-FEE1-444A-92C9-F297DCD955F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5726784-FEE1-444A-92C9-F297DCD955F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A657E96-422E-488B-953F-5DC6BD4E0799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A657E96-422E-488B-953F-5DC6BD4E0799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A657E96-422E-488B-953F-5DC6BD4E0799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A657E96-422E-488B-953F-5DC6BD4E0799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F82B944-AB79-4511-ACCF-C4809630D95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F82B944-AB79-4511-ACCF-C4809630D95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F82B944-AB79-4511-ACCF-C4809630D95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F82B944-AB79-4511-ACCF-C4809630D95D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -28,7 +28,6 @@ namespace SimpleTimer
                 {
                     await task;
                     PrintCurrentTime();
-                    Thread.Sleep(400);
                 }
             }
 

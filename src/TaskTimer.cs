@@ -27,10 +27,6 @@ namespace IKriv.Threading.Tasks
         private readonly TimeSpan _period;
         private CancellationToken _cancellationToken = CancellationToken.None;
 
-        public interface IDisposableEnumerable<out T> : IEnumerable<T>, IDisposable
-        {
-        }
-
         /// <summary>
         /// Creates new timer with a given period in seconds
         /// </summary>

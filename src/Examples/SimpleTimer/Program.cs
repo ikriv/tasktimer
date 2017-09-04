@@ -22,13 +22,14 @@ namespace SimpleTimer
             var lastSecond = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, DateTimeKind.Utc);
             var nextSecond = lastSecond.AddSeconds(1);
 
-            var timer = new TaskTimer(1000).StartAt(nextSecond);
-
-            foreach (var task in timer.Take(10))
+            using (var timer = new TaskTimer(1000).StartAt(nextSecond))
             {
-                await task;
-                PrintCurrentTime();
-                Thread.Sleep(400);
+                foreach (var task in timer.Take(10))
+                {
+                    await task;
+                    PrintCurrentTime();
+                    Thread.Sleep(400);
+                }
             }
 
             Console.WriteLine("Done");

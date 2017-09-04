@@ -15,18 +15,20 @@ namespace TickUntilKeyPress
 
         private static async Task Tick(CancellationToken token)
         {
-            var timer = new TaskTimer(2000).CancelWith(token).Start();
-            try
+            using (var timer = new TaskTimer(2000).CancelWith(token).Start())
             {
-                foreach (var task in timer)
+                try
                 {
-                    await task;
-                    PrintCurrentTime();
+                    foreach (var task in timer)
+                    {
+                        await task;
+                        PrintCurrentTime();
+                    }
                 }
-            }
-            catch (TaskCanceledException)
-            {
-                Console.WriteLine("Timer Canceled");
+                catch (TaskCanceledException)
+                {
+                    Console.WriteLine("Timer Canceled");
+                }
             }
         }
 

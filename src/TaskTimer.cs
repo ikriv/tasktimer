@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,16 @@ using System.Threading.Tasks;
 // ReSharper disable once CheckNamespace
 namespace IKriv.Threading.Tasks
 {
+    /// <summary>
+    /// Represents running task timer, a disposable infinite series of tasks
+    /// </summary>
+    /// <remarks>Task timer must be disposed (stopped) in the end of the usage. 
+    /// In can be enumerated only once. Attempting second enumeration will cause an 
+    /// InvalidOperationException.</remarks>
+    public interface ITaskTimer : IDisposable, IEnumerable<Task>
+    {
+    }
+
     /// <summary>
     /// Generates a series of tasks that get completed on timer
     /// </summary>
@@ -15,6 +26,10 @@ namespace IKriv.Threading.Tasks
     {
         private readonly TimeSpan _period;
         private CancellationToken _cancellationToken = CancellationToken.None;
+
+        public interface IDisposableEnumerable<out T> : IEnumerable<T>, IDisposable
+        {
+        }
 
         /// <summary>
         /// Creates new timer with a given period in seconds
@@ -51,8 +66,8 @@ namespace IKriv.Threading.Tasks
         /// Starts the timer and returns a series of tasks
         /// </summary>
         /// <param name="delayMs">Delay in milliseconds before first task in the series becomes completed</param>
-        /// <returns>Infinite series of tasks completed on timer one after the other</returns>
-        public IEnumerable<Task> Start(int delayMs = 0)
+        /// <returns>Infinite series of tasks completed on timer one after the other.</returns>
+        public ITaskTimer Start(int delayMs = 0)
         {
             return Start(TimeSpan.FromMilliseconds(delayMs));
         }
@@ -62,7 +77,7 @@ namespace IKriv.Threading.Tasks
         /// </summary>
         /// <param name="delay">Delay before first task in the series becomes completed</param>
         /// <returns>Infinite series of tasks completed on timer one after the other</returns>
-        public IEnumerable<Task> Start(TimeSpan delay)
+        public ITaskTimer Start(TimeSpan delay)
         {
             Func<Action, IDisposable> createTimer = callback => new Timer(state => callback(), null, delay, _period);
             return StartOnTimer(createTimer);
@@ -73,7 +88,7 @@ namespace IKriv.Threading.Tasks
         /// </summary>
         /// <param name="when">Absolute time when the first task in the series becomes completed</param>
         /// <returns>Infinite series of tasks completed on timer one after the other</returns>
-        public IEnumerable<Task> StartAt(DateTime when)
+        public ITaskTimer StartAt(DateTime when)
         {
             var delay = when - DateTime.UtcNow;
             return Start(delay);
@@ -86,16 +101,37 @@ namespace IKriv.Threading.Tasks
         /// <returns>This overload is used for tests and custom scenarios. The object created by createTimer()
         /// should invoke the callback delegate on a periodic basis. When it does, the next task in the series
         /// will be marked as completed.</returns>
-        public IEnumerable<Task> StartOnTimer(Func<Action, IDisposable> createTimer)
+        public ITaskTimer StartOnTimer(Func<Action, IDisposable> createTimer)
         {
-            using (var taskTimer = new TaskTimerImpl(createTimer, _cancellationToken))
+            return new DisposableEnumerable(new TaskTimerImpl(createTimer, _cancellationToken));
+        }
+
+        private class DisposableEnumerable : ITaskTimer
+        {
+            private readonly TaskTimerImpl _impl;
+            private IEnumerable<Task> _tasks;
+
+            public DisposableEnumerable(TaskTimerImpl impl)
             {
-                while (true)
-                {
-                    yield return taskTimer.NextTask();
-                }
+                _impl = impl;
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            public IEnumerator<Task> GetEnumerator()
+            {
+                if (_tasks != null) throw new InvalidOperationException("Timer cannot be enumerated twice");
+                _tasks = _impl.GetTasks();
+                return _tasks.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public void Dispose()
+            {
+                _impl.Dispose();
+            }
         }
 
         private class TaskTimerImpl : IDisposable
@@ -147,12 +183,21 @@ namespace IKriv.Threading.Tasks
                 foreach (var promise in toComplete) promise.SetResult(default(Void));
             }
 
+            public IEnumerable<Task> GetTasks()
+            {
+                while (true)
+                {
+                    yield return NextTask();
+                }
+                // ReSharper disable once IteratorNeverReturns
+            }
+
             public void Dispose()
             {
                 _timer.Dispose();
             }
 
-            public Task NextTask()
+            private Task NextTask()
             {
                 lock (_pendingTasks)
                 {
@@ -186,7 +231,7 @@ namespace IKriv.Threading.Tasks
                 }
             }
 
-            private Task CreateCanceledTask()
+            private static Task CreateCanceledTask()
             {
                 var promise = new TaskCompletionSource<Void>();
                 promise.TrySetCanceled();

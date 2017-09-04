@@ -120,11 +120,13 @@ namespace WebRequestOnTimer
         private static async Task PrintDayInfoOnTimer()
         {
             var generator = new LocationGenerator();
-            var timer = new TaskTimer(1000).Start();
-            foreach (var task in timer.Take(20))
+            using (var timer = new TaskTimer(1000).Start())
             {
-                await task;
-                await PrintDayInfo(generator.GetRandomLocation());
+                foreach (var task in timer.Take(20))
+                {
+                    await task;
+                    await PrintDayInfo(generator.GetRandomLocation());
+                }
             }
         }
 

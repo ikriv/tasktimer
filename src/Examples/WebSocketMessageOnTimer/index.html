@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Sockets Test</title>
+    <meta charset="utf-8" />
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    
+    <script src="jquery-dateFormat.min.js"></script>
+</head>
+<body>
+<h1>Web Sockets Test</h1>
+    <p id="timeGoesHere">Awaiting server response...</p>
+<script>
+    $(function() {
+        $.ajax("api/time")
+        .done(showTime);
+
+        var wsUrl = getWebSocketUrl('api/wstime');
+        var socket=new WebSocket(wsUrl);
+        socket.addEventListener('message',
+            function (event) {
+                var timeRecord = JSON.parse(event.data);
+                showTime(timeRecord);
+            });
+    });
+
+    function getWebSocketUrl(relativeUrl) {
+        var location = window.location;
+        var wsProtocol = (location.protocol === "https:") ? "wss:" : "ws:";
+        var result = wsProtocol + "//" + location.host + "/" + relativeUrl;
+        return result;
+    }
+
+    function showTime(record) {
+        var date = $.format.toBrowserTimeZone(record.timeUtc, "MMM d, yyyy HH:mm:ss.SSS");
+        $("#timeGoesHere").text(date);
+    }
+
+
+</script>
+</body>
+</html>

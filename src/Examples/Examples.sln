@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRequestOnTimer", "WebReq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketMessageOnTimer", "WebSocketMessageOnTimer\WebSocketMessageOnTimer.csproj", "{4C58EB91-AD55-49E3-83BD-F5DAC6ECEF4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTimer", "WpfTimer\WpfTimer.csproj", "{65C863CA-60C9-4CD2-A62C-EE9DC356E293}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4C58EB91-AD55-49E3-83BD-F5DAC6ECEF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C58EB91-AD55-49E3-83BD-F5DAC6ECEF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C58EB91-AD55-49E3-83BD-F5DAC6ECEF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C863CA-60C9-4CD2-A62C-EE9DC356E293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C863CA-60C9-4CD2-A62C-EE9DC356E293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C863CA-60C9-4CD2-A62C-EE9DC356E293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C863CA-60C9-4CD2-A62C-EE9DC356E293}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
